@@ -7,13 +7,13 @@ Design a Pastebin like web service, where users can store plain text. Users of t
 <em>Similar Services:</em> pastebin.com, controlc.com, hastebin.com, privatebin.net
 <em>Difficulty Level:</em> Easy
 
-1. <b>What is Pastebin?</b>
+<b>1. What is Pastebin?</b>
 
 #
 
 Pastebin like services enable users to store plain text or images over the network (typically the Internet) and generate unique URLs to access the uploaded data. Such services are also used to share data over the network quickly, as users would just need to pass the URL to let other users see it.
 
-2. <b>Requirements and Goals of the System</b>
+<b>2. Requirements and Goals of the System</b>
 
 #
 
@@ -38,7 +38,7 @@ d) Paste links should not be guessable (not predictable).
 a) Analytics, e.g., how many times a paste was accessed?
 b) Our service should also be accessible through REST APIs by other services.
 
-3. <b>Some Design Considerations</b>
+<b>3. Some Design Considerations</b>
 
 Pastebin shares some requirements with <em>URL Shortening service</em>, but there are some additional design considerations we should keep in mind.
 
@@ -50,7 +50,7 @@ We can limit users not to have Pastes bigger than 10MB to stop the abuse of the 
 
 Since our service supports custom URLs, users can pick any URL that they like, but providing a custom URL is not mandatory. However, it is reasonable (and often desirable) to impose a size limit on custom URLs, so that we have a consistent URL database.
 
-4. <b>Capacity Estimation and Constraints</b>
+<b>4. Capacity Estimation and Constraints</b>
 
 Our services will be read-heavy; there will be more read requests compared to new Paste creation. We can assume a 5:1 ratio between the read and write.
 
@@ -92,7 +92,7 @@ Since we have 5M read requests per day, to cache 20% of these requests, we would
 
 0.2 \* 5M \* 10KB ~= 10 GB
 
-5. <b>System APIs</b>
+<b>5. System APIs</b>
 
 #
 
@@ -119,7 +119,7 @@ Where “api_paste_key” is a string representing the Paste Key of the paste to
 <em>deletePaste(api_dev_key, api_paste_key)</em>
 A successful deletion returns ‘true’, otherwise returns ‘false’.
 
-6. <b>Database Design</b>
+<b>6. Database Design</b>
 
 #
 
@@ -140,7 +140,7 @@ Here, ‘URlHash’ is the URL equivalent of the TinyURL, and ‘ContentKey’ i
 
 Here, ‘URlHash’ is the URL equivalent of the TinyURL, and ‘ContentKey’ is a reference to an external object storing the contents of the paste; we’ll discuss the external storage of the paste contents later in the chapter.
 
-7. <b>High Level Design</b>
+<b>7. High Level Design</b>
 
 #
 
@@ -148,11 +148,11 @@ At a high level, we need an application layer that will serve all the read and w
 
 <em>Refer HLD-Pastebin diagram</em>
 
-8. <b>Component Design</b>
+<b>8. Component Design</b>
 
 #
 
-a. <b>Application layer</b> #
+<b>a. Application layer</b> #
 Our application layer will process all incoming and outgoing requests. The application servers will be talking to the backend data store components to serve the requests.
 
 <b>How to handle a write-request?</b>
@@ -172,7 +172,7 @@ Yes, this can surely speed things up. Although in this case, if the application 
 
 Upon receiving a read paste request, the application service layer contacts the datastore. The datastore searches for the key, and if it is found, it returns the paste’s contents. Otherwise, an error code is returned.
 
-b. <b>Datastore layer</b> #
+<b>b. Datastore layer</b> #
 
 We can divide our datastore layer into two:
 
@@ -186,25 +186,25 @@ We can store our contents in an Object Storage like Amazon’s S3. Whenever we f
 
 <em>Refer to Detailed Component Design For Pastebin Diagram</em>
 
-9. <b>Purging or DB Cleanup</b>
+<b>9. Purging or DB Cleanup</b>
 
 #
 
 Please see Designing a <em>URL Shortening service.</em>
 
-10. <b>Data Partitioning and Replication</b>
+<b>10. Data Partitioning and Replication</b>
 
 #
 
 Please see Designing a <em>URL Shortening service.</em>
 
-11. <b>Cache and Load Balancer</b>
+<b>11. Cache and Load Balancer</b>
 
 #
 
 Please see Designing a <em>URL Shortening service.</em>
 
-12. <b>Security and Permissions</b>
+<b>12. Security and Permissions</b>
 
 #
 
