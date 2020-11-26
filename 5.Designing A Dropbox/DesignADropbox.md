@@ -61,7 +61,7 @@ The system should support snapshotting of the data, so that users can go back to
 100B \* 100KB => 10PB
 •Let’s also assume that we will have one million active connections per minute.
 
-Total Users \t \t 500 million users
+Total Users <br/><br/>500 million users
 Files per user \t \t 200
 File size (avg) \t \t 100KB
 Total Files \t \t 100 billion
