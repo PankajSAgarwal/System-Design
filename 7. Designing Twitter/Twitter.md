@@ -36,9 +36,9 @@ We will be designing a simpler version of Twitter with the following requirement
 
 Let’s assume we have one billion total users with 200 million daily active users (DAU). Also assume we have 100 million new tweets every day and on average each user follows 200 people.
 
-_Total Users = 1 billion_
-_DAU = 200 million_
-_No of tweets every day = 100 million_
+_Total Users = 1 billion_  
+_DAU = 200 million_  
+_No of tweets every day = 100 million_  
 _Avg number of people each user follows = 200 people_
 
 **How many favorites per day? If, on average, each user favorites five tweets per day we will have:**
