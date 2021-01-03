@@ -52,3 +52,46 @@ _200M DAU \* ((2 + 5) \* 20 tweets) => 28B/day_
 **Storage Estimates** Let’s say each tweet has 140 characters and we need two bytes to store a character without compression. Let’s assume we need 30 bytes to store metadata with each tweet (like ID, timestamp, user ID, etc.). Total storage we would need:
 
 _100M \* (280 + 30) bytes => 30GB/day_
+
+What would our storage needs be for five years? How much storage we would need for users’ data, follows, favorites? We will leave this for the exercise.
+
+Not all tweets will have media, let’s assume that on average every fifth tweet has a photo and every tenth has a video. Let’s also assume on average a photo is 200KB and a video is 2MB. This will lead us to have 24TB of new media every day.
+
+_(100M/5 photos * 200KB) + (100M/10 videos * 2MB) ~= 24TB/day_
+
+**Bandwidth Estimates** Since total ingress is 24TB per day, this would translate into 290MB/sec.
+
+Remember that we have 28B tweet views per day. We must show the photo of every tweet (if it has a photo), but let’s assume that the users watch every 3rd video they see in their timeline. So, total egress will be:
+
+_(28B \* 280 bytes) / 86400s of text => 93MB/s_
+
+_\+ (28B/5 \* 200KB ) / 86400s of photos => 13GB/s_
+_\+ (28B/10/3 \* 2MB ) / 86400s of Videos => 22GB/s_
+
+_Total ~= 35GB/s_
+
+**4. System APIs**
+
+_💡 Once we've finalized the requirements, it's always a good idea to define the system APIs. This should explicitly state what is expected from the system._
+
+We can have SOAP or REST APIs to expose the functionality of our service. Following could be the definition of the API for posting a new tweet:
+
+_tweet(api_dev_key, tweet_data, tweet_location, user_location, media_ids)_
+
+**Parameters:**
+
+_api_dev_key_ (string): The API developer key of a registered account. This will be used to, among other things, throttle users based on their allocated quota.
+_tweet_data_ (string): The text of the tweet, typically up to 140 characters.
+_tweet_location_ (string): Optional location (longitude, latitude) this Tweet refers to.
+_user_location_ (string): Optional location (longitude, latitude) of the user adding the tweet.
+_media_ids_ (number[]): Optional list of media_ids to be associated with the Tweet. (all the media photo, video, etc. need to be uploaded separately).
+
+**Returns:** (string)
+A successful post will return the URL to access that tweet. Otherwise, an appropriate HTTP error is returned.
+
+**5. High Level System Design #**
+
+We need a system that can efficiently store all the new tweets,
+_100M/86400s => 1150_ tweets per second and read _28B/86400s => 325K_ tweets per second. It is clear from the requirements that this will be a read-heavy system.
+
+At a high level, we need multiple application servers to serve all these requests with load balancers in front of them for traffic distributions. On the backend, we need an efficient database that can store all the new tweets and can support a huge number of reads. We also need some file storage to store photos and videos.
